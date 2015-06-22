@@ -4,7 +4,7 @@ var Promise = require('bluebird');
 var exerciseUtils = require('./utils');
 
 var readFile = exerciseUtils.readFile;
-var promisifiedReadFile = exerciseUtils.promisifedReadFile;
+var promisifiedReadFile = exerciseUtils.promisifiedReadFile;
 
 var green = exerciseUtils.green;
 var red = exerciseUtils.red;
@@ -22,6 +22,10 @@ readFile('poem-one/stanza-01.txt', function (err, stanza) {
 });
 
 // promise version
+promisifiedReadFile("poem-one/stanza-01.txt").then(function(stanza){
+	console.log('-- A. promise version --');
+	green(stanza);
+}); 
 // ???
 
 
@@ -42,6 +46,14 @@ readFile('poem-one/stanza-03.txt', function (err, stanza3) {
 });
 
 // promise version
+promisifiedReadFile("poem-one/stanza-02.txt").then(function(stanza2){
+	console.log('-- B. promise version (stanza two) --');
+	green(stanza2);
+	return promisifiedReadFile("poem-one/stanza-03.txt");
+}).then(function(stanza3){
+	console.log('-- B. promise version (stanza three) --');
+	green(stanza3);
+})
 // ???
 
 
@@ -64,6 +76,16 @@ readFile('poem-one/stanza-02.txt', function (err, stanza2) {
 });
 
 // promise version
+promisifiedReadFile("poem-one/stanza-02.txt").then(function(stanza2){
+	console.log('-- C. promise version (stanza two) --');
+	green(stanza2);
+	return promisifiedReadFile("poem-one/stanza-03.txt");
+}).then(function(stanza3){
+	console.log('-- C. promise version (stanza three) --');
+	green(stanza3);
+}).then(function(){
+	console.log("done");
+})
 // ???
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * *
@@ -80,6 +102,10 @@ readFile('poem-one/wrong-file-name.txt', function (err, stanza4) {
 });
 
 // promise version
+promisifiedReadFile("poem-one/wrong-file-name.txt").then( null, function(error){
+	console.log('-- D. promise version (stanza four) --');
+	red(error);
+})
 // ???
 
 
@@ -103,6 +129,17 @@ readFile('poem-one/stanza-03.txt', function (err, stanza3) {
 });
 
 // promise version
+promisifiedReadFile("poem-one/stanza-03.txt").then(function(stanza3){
+		console.log('-- E. promise version (stanza three) --');
+		green(stanza3);
+		return promisifiedReadFile("poem-one/wrong-file-name.txt");
+}).then(function(stanza4){
+		console.log('-- E. promise version (stanza four) --');
+		green(stanza4);
+}, function(error){
+	console.log("erorrrrrrrrr");
+	red(error);
+});
 // ???
 
 
@@ -132,4 +169,22 @@ readFile('poem-one/stanza-03.txt', function (err, stanza3) {
 });
 
 // promise version
+promisifiedReadFile("poem-one/stanza-03.txt").then(function(stanza3){
+		console.log('-- F. promise version (stanza three) --');
+		green(stanza3);
+		return promisifiedReadFile("poem-one/wrong-file-name.txt");
+}).then(function(stanza4){
+		console.log('-- F. promise version (stanza four) --');
+		green(stanza4);
+}, function(error){
+	console.log("F erorrrrrrrrr");
+	red(error);
+}).then(function(){
+	console.log("F Done");
+});
 // ???
+
+
+
+
+
