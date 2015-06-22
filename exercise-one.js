@@ -26,7 +26,6 @@ promisifiedReadFile("poem-one/stanza-01.txt").then(function(stanza){
 	console.log('-- A. promise version --');
 	green(stanza);
 }); 
-// ???
 
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * *
@@ -54,7 +53,6 @@ promisifiedReadFile("poem-one/stanza-02.txt").then(function(stanza2){
 	console.log('-- B. promise version (stanza three) --');
 	green(stanza3);
 })
-// ???
 
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * *
@@ -86,7 +84,6 @@ promisifiedReadFile("poem-one/stanza-02.txt").then(function(stanza2){
 }).then(function(){
 	console.log("done");
 })
-// ???
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * *
  *
@@ -106,7 +103,6 @@ promisifiedReadFile("poem-one/wrong-file-name.txt").then( null, function(error){
 	console.log('-- D. promise version (stanza four) --');
 	red(error);
 })
-// ???
 
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * *
@@ -140,7 +136,6 @@ promisifiedReadFile("poem-one/stanza-03.txt").then(function(stanza3){
 	console.log("erorrrrrrrrr");
 	red(error);
 });
-// ???
 
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * *
@@ -182,7 +177,6 @@ promisifiedReadFile("poem-one/stanza-03.txt").then(function(stanza3){
 }).then(function(){
 	console.log("F Done");
 });
-// ???
 
 
 

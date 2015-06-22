@@ -147,7 +147,7 @@ Promise.reduce(filenames, function(total, file) {
 		green(contents);
 	}, function(err) {
 		red(err);
-		// if we want to stop the process
+		// if we want to stop the remaining promises, throw this error
 		// throw err;
 	});
 }, null).then(function() {
