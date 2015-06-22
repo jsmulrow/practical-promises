@@ -5,7 +5,7 @@ var async = require('async');
 var exerciseUtils = require('./utils');
 
 var readFile = exerciseUtils.readFile;
-var promisifiedReadFile = exerciseUtils.promisifedReadFile;
+var promisifiedReadFile = exerciseUtils.promisifiedReadFile;
 
 var green = exerciseUtils.green;
 var red = exerciseUtils.red;
@@ -32,7 +32,17 @@ async.each(['poem-two/stanza-01.txt', 'poem-two/stanza-02.txt'],
 );
 
 // promise version
-// ???
+var files = ['poem-two/stanza-01.txt', 'poem-two/stanza-02.txt'].map(function(file) {
+	return promisifiedReadFile(file).then(function(contents) {
+		console.log('-- A. promise version --')
+		green(contents);
+	});
+});
+
+Promise.all(files).then(function() {
+	console.log('-- A. Promise done --');
+});
+
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * *
  *
@@ -60,7 +70,16 @@ async.each(filenames,
 );
 
 // promise version
-// ???
+var files = [1,2,3,4,5,6,7,8].map(function(num) {
+	return promisifiedReadFile('poem-two/' + 'stanza-0' + num + '.txt').then(function (contents) {
+		console.log('-- B. promise version --');
+		green(contents);
+	});
+});
+
+Promise.all(files).then(function() {
+	console.log('-- B. Promise done');
+});
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * *
  *
@@ -84,15 +103,23 @@ async.eachSeries(filenames,
 );
 
 // promise version
-// ???
+Promise.reduce(filenames, function(total, file) {
+	return promisifiedReadFile(file).then(function(contents) {
+		console.log('-- C. promise version  --');
+		green(contents);
+	});
+}, null).then(function() {
+	console.log('-- C. Promises done');
+});
 
-/* * * * * * * * * * * * * * * * * * * * * * * * * * * *
+
+ /* * * * * * * * * * * * * * * * * * * * * * * * * * *
  *
  * D. log all the stanzas in poem two, *in order*
  *    making sure to fail for any error and log it out
  *    and log 'done' when they're all done
- *
  */
+ 
 
 var randIdx = Math.floor(Math.random() * filenames.length);
 filenames[randIdx] = 'wrong-file-name.txt';
@@ -114,7 +141,19 @@ async.eachSeries(filenames,
 );
 
 // promise version
-// ???
+Promise.reduce(filenames, function(total, file) {
+	return promisifiedReadFile(file).then(function(contents) {
+		console.log('-- D. promise version --');
+		green(contents);
+	}, function(err) {
+		red(err);
+		// if we want to stop the process
+		// throw err;
+	});
+}, null).then(function() {
+	console.log('-- D. Promises done');
+});
+
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * *
  *
@@ -123,4 +162,20 @@ async.eachSeries(filenames,
  */
 
 var fs = require('fs');
-function promisifiedWriteFile (filename, str) {}
+function promisifiedWriteFile (filename, str) {
+	return new Promise(function (resolve, reject) {
+		fs.writeFile(filename, str, function(err) {
+			if (err) reject(err);
+			else resolve();
+		});
+	});
+}
+
+// for testing
+promisifiedWriteFile('test.txt', 'this is a test').then(function() {
+	green('the file was written');
+}, function(err) {
+	red('there was an error');
+});
+
+
